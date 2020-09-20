@@ -41,6 +41,7 @@
 #define QWEBENGINEURLREQUESTINFO_H
 
 #include <QtWebEngineCore/qtwebenginecoreglobal.h>
+#include "qwebengineurlrequestbody.h"
 
 #include <QtCore/qscopedpointer.h>
 #include <QtCore/qurl.h>
@@ -103,6 +104,7 @@ public:
     QUrl initiator() const;
     QByteArray requestMethod() const;
     bool changed() const;
+    const QWebEngineUrlRequestBody &body() const;
 
     void block(bool shouldBlock);
     void redirect(const QUrl &url);

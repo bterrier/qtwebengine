@@ -37,8 +37,8 @@
 **
 ****************************************************************************/
 
-#ifndef QWEBENGINEURLREQUESTINFO_P_H
-#define QWEBENGINEURLREQUESTINFO_P_H
+#ifndef QWEBENGINEURLREQUESTBODY_P_H
+#define QWEBENGINEURLREQUESTBODY_P_H
 
 //
 //  W A R N I N G
@@ -53,42 +53,27 @@
 
 #include "qtwebenginecoreglobal_p.h"
 
-#include "qwebengineurlrequestinfo.h"
+#include "qwebengineurlrequestbody.h"
 
-#include <QByteArray>
-#include <QHash>
-#include <QUrl>
-
-namespace net {
-class URLRequest;
+namespace network {
+    class ResourceRequestBody;
 }
 
 QT_BEGIN_NAMESPACE
 
-class QWebEngineUrlRequestBodyPrivate;
-
-class QWebEngineUrlRequestInfoPrivate {
-    Q_DECLARE_PUBLIC(QWebEngineUrlRequestInfo)
+class QWebEngineUrlRequestBodyPrivate
+{
 public:
-    QWebEngineUrlRequestInfoPrivate(QWebEngineUrlRequestInfo::ResourceType resource,
-                                    QWebEngineUrlRequestInfo::NavigationType navigation, const QUrl &u, const QUrl &fpu,
-                                    const QUrl &i, const QByteArray &m, QWebEngineUrlRequestBodyPrivate *body);
+    QWebEngineUrlRequestBodyPrivate(network::ResourceRequestBody *b);
+    ~QWebEngineUrlRequestBodyPrivate();
 
-    QWebEngineUrlRequestInfo::ResourceType resourceType;
-    QWebEngineUrlRequestInfo::NavigationType navigationType;
-    bool shouldBlockRequest;
-    bool shouldRedirectRequest;
-    QUrl url;
-    QUrl firstPartyUrl;
-    QUrl initiator;
-    const QByteArray method;
-    bool changed;
-    QHash<QByteArray, QByteArray> extraHeaders;
-    QWebEngineUrlRequestBody body;
-
-    QWebEngineUrlRequestInfo *q_ptr;
+private:
+    Q_DECLARE_PUBLIC(QWebEngineUrlRequestBody)
+    QWebEngineUrlRequestBody *q_ptr;
+    network::ResourceRequestBody *body;
 };
+
 
 QT_END_NAMESPACE
 
-#endif // QWEBENGINEURLREQUESTINFO_P_H
+#endif // QWEBENGINEURLREQUESTBODY_P_H

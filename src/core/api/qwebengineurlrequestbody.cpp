@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2019 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtWebEngine module of the Qt Toolkit.
@@ -37,58 +37,44 @@
 **
 ****************************************************************************/
 
-#ifndef QWEBENGINEURLREQUESTINFO_P_H
-#define QWEBENGINEURLREQUESTINFO_P_H
+#include "services/network/public/cpp/resource_request_body.h"
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "qtwebenginecoreglobal_p.h"
-
-#include "qwebengineurlrequestinfo.h"
-
-#include <QByteArray>
-#include <QHash>
-#include <QUrl>
-
-namespace net {
-class URLRequest;
-}
+#include "qwebengineurlrequestbody.h"
+#include "qwebengineurlrequestbody_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QWebEngineUrlRequestBodyPrivate;
+QWebEngineUrlRequestBodyPrivate::QWebEngineUrlRequestBodyPrivate(network::ResourceRequestBody *b)
+    : body(b)
+{}
 
-class QWebEngineUrlRequestInfoPrivate {
-    Q_DECLARE_PUBLIC(QWebEngineUrlRequestInfo)
-public:
-    QWebEngineUrlRequestInfoPrivate(QWebEngineUrlRequestInfo::ResourceType resource,
-                                    QWebEngineUrlRequestInfo::NavigationType navigation, const QUrl &u, const QUrl &fpu,
-                                    const QUrl &i, const QByteArray &m, QWebEngineUrlRequestBodyPrivate *body);
+QWebEngineUrlRequestBodyPrivate::~QWebEngineUrlRequestBodyPrivate(){}
+QWebEngineUrlRequestBody::QWebEngineUrlRequestBody(){}
+QWebEngineUrlRequestBody::~QWebEngineUrlRequestBody(){}
 
-    QWebEngineUrlRequestInfo::ResourceType resourceType;
-    QWebEngineUrlRequestInfo::NavigationType navigationType;
-    bool shouldBlockRequest;
-    bool shouldRedirectRequest;
-    QUrl url;
-    QUrl firstPartyUrl;
-    QUrl initiator;
-    const QByteArray method;
-    bool changed;
-    QHash<QByteArray, QByteArray> extraHeaders;
-    QWebEngineUrlRequestBody body;
+/*!
+    \internal
+*/
+int QWebEngineUrlRequestBody::count() const {
+    if (!d_ptr->body)
+        return 0;
 
-    QWebEngineUrlRequestInfo *q_ptr;
-};
+    return d_ptr->body->elements()->size();
+}
+
+QByteArray QWebEngineUrlRequestBody::data(int index) const {
+    const auto &elem = (*d_ptr->body->elements())[index];
+    return QByteArray{ elem.bytes(), int(elem.length()) };
+}
+
+QWebEngineUrlRequestBody::QWebEngineUrlRequestBody(QWebEngineUrlRequestBodyPrivate *p)
+    : d_ptr(p)
+{
+    p->q_ptr = this;
+}
+
+bool QWebEngineUrlRequestBody::isValid() const{
+    return d_ptr && d_ptr->body;
+}
 
 QT_END_NAMESPACE
-
-#endif // QWEBENGINEURLREQUESTINFO_P_H

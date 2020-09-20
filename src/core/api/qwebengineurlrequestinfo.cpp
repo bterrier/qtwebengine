@@ -42,6 +42,7 @@
 
 #include "content/public/common/resource_type.h"
 
+#include "qwebengineurlrequestbody.h"
 #include "web_contents_adapter_client.h"
 
 QT_BEGIN_NAMESPACE
@@ -132,7 +133,8 @@ ASSERT_ENUMS_MATCH(QtWebEngineCore::WebContentsAdapterClient::RedirectNavigation
 QWebEngineUrlRequestInfoPrivate::QWebEngineUrlRequestInfoPrivate(QWebEngineUrlRequestInfo::ResourceType resource,
                                                                  QWebEngineUrlRequestInfo::NavigationType navigation,
                                                                  const QUrl &u, const QUrl &fpu, const QUrl &i,
-                                                                 const QByteArray &m)
+                                                                 const QByteArray &m,
+                                                                 QWebEngineUrlRequestBodyPrivate *b)
     : resourceType(resource)
     , navigationType(navigation)
     , shouldBlockRequest(false)
@@ -141,6 +143,7 @@ QWebEngineUrlRequestInfoPrivate::QWebEngineUrlRequestInfoPrivate(QWebEngineUrlRe
     , firstPartyUrl(fpu)
     , initiator(i)
     , method(m)
+    , body({ b })
     , changed(false)
 {}
 
@@ -293,6 +296,15 @@ QByteArray QWebEngineUrlRequestInfo::requestMethod() const
 bool QWebEngineUrlRequestInfo::changed() const
 {
     return d_ptr->changed;
+}
+
+/*!
+    Returns the HTTP request body.
+*/
+
+const QWebEngineUrlRequestBody &QWebEngineUrlRequestInfo::body() const
+{
+    return d_ptr->body;
 }
 
 /*!

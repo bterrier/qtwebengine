@@ -44,6 +44,8 @@ HEADERS = \
     qwebenginenotification.h \
     qwebenginequotarequest.h \
     qwebengineregisterprotocolhandlerrequest.h \
+    qwebengineurlrequestbody.h \
+    qwebengineurlrequestbody_p.h \
     qwebengineurlrequestinterceptor.h \
     qwebengineurlrequestinfo.h \
     qwebengineurlrequestinfo_p.h \
@@ -61,6 +63,7 @@ SOURCES = \
     qwebenginenotification.cpp \
     qwebenginequotarequest.cpp \
     qwebengineregisterprotocolhandlerrequest.cpp \
+    qwebengineurlrequestbody.cpp \
     qwebengineurlrequestinfo.cpp \
     qwebengineurlrequestjob.cpp \
     qwebengineurlscheme.cpp \

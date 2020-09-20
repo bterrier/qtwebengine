@@ -58,6 +58,7 @@
 #include "net/http/http_status_code.h"
 #include "net/http/http_util.h"
 
+#include "api/qwebengineurlrequestbody_p.h"
 #include "api/qwebengineurlrequestinfo_p.h"
 #include "profile_qt.h"
 #include "type_conversion.h"
@@ -226,9 +227,10 @@ void InterceptedRequest::Restart()
     else
         firstPartyUrl = toQt(request_.site_for_cookies); // m_topDocumentUrl can be empty for the main-frame.
 
+    auto bodyp = new QWebEngineUrlRequestBodyPrivate(request_.request_body.get());
     QWebEngineUrlRequestInfoPrivate *infoPrivate =
             new QWebEngineUrlRequestInfoPrivate(toQt(resourceType), toQt(navigationType), originalUrl, firstPartyUrl,
-                                                initiator, QByteArray::fromStdString(request_.method));
+                                                initiator, QByteArray::fromStdString(request_.method), bodyp);
     request_info_ = QWebEngineUrlRequestInfo(infoPrivate);
 
     // TODO: remove for Qt6

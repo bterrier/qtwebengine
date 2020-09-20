@@ -37,58 +37,34 @@
 **
 ****************************************************************************/
 
-#ifndef QWEBENGINEURLREQUESTINFO_P_H
-#define QWEBENGINEURLREQUESTINFO_P_H
+#ifndef QWEBENGINEURLREQUESTBODY_H
+#define QWEBENGINEURLREQUESTBODY_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists purely as an
-// implementation detail.  This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
+#include <QtWebEngineCore/qtwebenginecoreglobal.h>
 
-#include "qtwebenginecoreglobal_p.h"
-
-#include "qwebengineurlrequestinfo.h"
-
-#include <QByteArray>
-#include <QHash>
-#include <QUrl>
-
-namespace net {
-class URLRequest;
-}
+#include <QtCore/qbytearray.h>
+#include <QtCore/qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 
 class QWebEngineUrlRequestBodyPrivate;
+class QWebEngineUrlRequestInfoPrivate;
 
-class QWebEngineUrlRequestInfoPrivate {
-    Q_DECLARE_PUBLIC(QWebEngineUrlRequestInfo)
+class Q_WEBENGINECORE_EXPORT QWebEngineUrlRequestBody
+{
 public:
-    QWebEngineUrlRequestInfoPrivate(QWebEngineUrlRequestInfo::ResourceType resource,
-                                    QWebEngineUrlRequestInfo::NavigationType navigation, const QUrl &u, const QUrl &fpu,
-                                    const QUrl &i, const QByteArray &m, QWebEngineUrlRequestBodyPrivate *body);
-
-    QWebEngineUrlRequestInfo::ResourceType resourceType;
-    QWebEngineUrlRequestInfo::NavigationType navigationType;
-    bool shouldBlockRequest;
-    bool shouldRedirectRequest;
-    QUrl url;
-    QUrl firstPartyUrl;
-    QUrl initiator;
-    const QByteArray method;
-    bool changed;
-    QHash<QByteArray, QByteArray> extraHeaders;
-    QWebEngineUrlRequestBody body;
-
-    QWebEngineUrlRequestInfo *q_ptr;
+    QWebEngineUrlRequestBody();
+    ~QWebEngineUrlRequestBody();
+    int count() const;
+    QByteArray data(int index) const;
+    bool isValid() const;
+private:
+    friend class QWebEngineUrlRequestInfoPrivate;
+    Q_DECLARE_PRIVATE(QWebEngineUrlRequestBody)
+    QWebEngineUrlRequestBody(QWebEngineUrlRequestBodyPrivate *p);
+    QScopedPointer<QWebEngineUrlRequestBodyPrivate> d_ptr;
 };
 
 QT_END_NAMESPACE
 
-#endif // QWEBENGINEURLREQUESTINFO_P_H
+#endif // QWEBENGINEURLREQUESTBODY_H
