@@ -132,6 +132,7 @@ public:
     QString pageTitle() const;
     QString selectedText() const;
     QUrl iconUrl() const;
+    int activeHttpStatusCode() const;
 
     void undo();
     void redo();

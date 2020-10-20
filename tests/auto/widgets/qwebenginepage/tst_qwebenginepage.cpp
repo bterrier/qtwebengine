@@ -234,6 +234,8 @@ private Q_SLOTS:
     void isSafeRedirect_data();
     void isSafeRedirect();
 
+    void httpStatusCode();
+
 private:
     static QPoint elementCenter(QWebEnginePage *page, const QString &id);
     static bool isFalseJavaScriptResult(QWebEnginePage *page, const QString &javaScript);
@@ -4710,6 +4712,36 @@ void tst_QWebEnginePage::isSafeRedirect()
     QTRY_COMPARE_WITH_TIMEOUT(spy.count(), 1, 20000);
     QCOMPARE(page.url(), expectedUrl);
     spy.clear();
+}
+
+void tst_QWebEnginePage::httpStatusCode()
+{
+    HttpServer server;
+    int serverStatus = 200;
+    connect(&server, &HttpServer::newRequest, [&](HttpReqRep *rr) {
+        QCOMPARE(rr->requestMethod(), "GET");
+        rr->setResponseBody(QByteArrayLiteral("<html><body>Test</body></html>"));
+        rr->sendResponse(serverStatus);
+    });
+    QVERIFY(server.start());
+
+
+    QWebEnginePage page;
+    QSignalSpy loadSpy(&page, SIGNAL(loadFinished(bool)));
+    QCOMPARE(page.httpStatusCode(), 0);
+
+    page.load(server.url("/"));
+
+    QTRY_COMPARE(loadSpy.count(), 1);
+    QCOMPARE(loadSpy.takeFirst().value(0).toBool(), true);
+    QCOMPARE(page.httpStatusCode(), 200);
+
+    serverStatus = 404;
+    page.load(server.url("/"));
+
+    QTRY_COMPARE(loadSpy.count(), 1);
+    QCOMPARE(loadSpy.takeFirst().value(0).toBool(), true);
+    QCOMPARE(page.httpStatusCode(), 404);
 }
 
 static QByteArrayList params = {QByteArrayLiteral("--use-fake-device-for-media-stream")};

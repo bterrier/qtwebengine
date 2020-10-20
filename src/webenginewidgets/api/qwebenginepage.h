@@ -281,6 +281,8 @@ public:
     QUrl iconUrl() const;
     QIcon icon() const;
 
+    int httpStatusCode() const;
+
     qreal zoomFactor() const;
     void setZoomFactor(qreal factor);
 
