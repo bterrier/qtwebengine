@@ -231,6 +231,16 @@ QUrl WebContentsDelegateQt::url(content::WebContents* source) const {
     m_pendingUrlUpdate = false;
     return newUrl;
 }
+
+int WebContentsDelegateQt::httpStatusCode(content::WebContents* source) const {
+
+    content::NavigationEntry *entry = source->GetController().GetVisibleEntry();
+    if (entry) {
+        return entry->GetHttpStatusCode();
+    }
+    return 0;
+}
+
 void WebContentsDelegateQt::AddNewContents(content::WebContents* source, std::unique_ptr<content::WebContents> new_contents, WindowOpenDisposition disposition, const gfx::Rect& initial_pos, bool user_gesture, bool* was_blocked)
 {
     Q_UNUSED(source)

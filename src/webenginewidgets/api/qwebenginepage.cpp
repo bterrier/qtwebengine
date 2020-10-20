@@ -2089,6 +2089,12 @@ void QWebEnginePage::setUrl(const QUrl &url)
     load(url);
 }
 
+int QWebEnginePage::httpStatusCode() const
+{
+    Q_D(const QWebEnginePage);
+    return d->adapter->activeHttpStatusCode();
+}
+
 QUrl QWebEnginePage::url() const
 {
     Q_D(const QWebEnginePage);

@@ -786,6 +786,12 @@ QUrl WebContentsAdapter::activeUrl() const
     return m_webContentsDelegate->url(webContents());
 }
 
+int WebContentsAdapter::activeHttpStatusCode() const
+{
+    CHECK_INITIALIZED(0);
+    return m_webContentsDelegate->httpStatusCode(webContents());
+}
+
 QUrl WebContentsAdapter::requestedUrl() const
 {
     CHECK_INITIALIZED(QUrl());
