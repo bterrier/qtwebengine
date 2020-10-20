@@ -1933,6 +1933,19 @@ QUrl QWebEnginePage::requestedUrl() const
 }
 
 /*!
+    \since 6.1
+
+    The HTTP status code reveived when loading the current page.
+
+    If the HTTP response has not be reveived, 0 is returned.
+*/
+int QWebEnginePage::httpStatusCode() const
+{
+    Q_D(const QWebEnginePage);
+    return d->adapter->activeHttpStatusCode();
+}
+
+/*!
     \property QWebEnginePage::iconUrl
     \brief The URL of the icon associated with the page currently viewed.
 

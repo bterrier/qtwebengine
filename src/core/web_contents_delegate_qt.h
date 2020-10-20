@@ -113,6 +113,7 @@ public:
 
     QUrl url(content::WebContents *source) const;
     QString title() const { return m_title; }
+    int httpStatusCode(content::WebContents *source) const;
 
     // WebContentsDelegate overrides
     content::WebContents *OpenURLFromTab(content::WebContents *source, const content::OpenURLParams &params) override;
